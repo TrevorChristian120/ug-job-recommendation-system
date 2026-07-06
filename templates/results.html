@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Recommendations</title>
+</head>
+
+<body>
+
+    <h1>Top Job Recommendations</h1>
+
+    <table border="1">
+
+        <tr>
+            <th>Job Title</th>
+            <th>Match Percentage</th>
+        </tr>
+
+        {% for job in jobs %}
+
+        <tr>
+
+            <td>{{ job.title }}</td>
+
+            <td>
+                {{ (job.similarity * 100)|round(2) }}%
+            </td>
+
+        </tr>
+
+        {% endfor %}
+
+    </table>
+
+    <br>
+
+    <a href="/">Try Again</a>
+
+</body>
+
+</html>
