@@ -7,34 +7,63 @@
 
 <body>
 
-    <h1>Top Job Recommendations</h1>
+<h1>Job Recommendations</h1>
 
-    <table border="1">
+{% for job in jobs %}
 
-        <tr>
-            <th>Job Title</th>
-            <th>Match Percentage</th>
-        </tr>
+<hr>
 
-        {% for job in jobs %}
+<h2>{{ job.title }}</h2>
 
-        <tr>
+<p>
 
-            <td>{{ job.title }}</td>
+Similarity Score:
+<strong>
+{{ (job.similarity * 100)|round(2) }}%
+</strong>
 
-            <td>
-                {{ (job.similarity * 100)|round(2) }}%
-            </td>
+</p>
 
-        </tr>
+<p>
 
-        {% endfor %}
+Skill Match:
+<strong>
+{{ job.match_percentage }}%
+</strong>
 
-    </table>
+</p>
 
-    <br>
+<h3>Skills You Have</h3>
 
-    <a href="/">Try Again</a>
+<ul>
+
+{% for skill in job.matched %}
+
+<li>✔ {{ skill }}</li>
+
+{% endfor %}
+
+</ul>
+
+<h3>Missing Skills</h3>
+
+<ul>
+
+{% for skill in job.missing %}
+
+<li>✘ {{ skill }}</li>
+
+{% endfor %}
+
+</ul>
+
+{% endfor %}
+
+<br>
+
+/
+Try Again
+</a>
 
 </body>
 

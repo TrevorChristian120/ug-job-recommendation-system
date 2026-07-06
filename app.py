@@ -6,11 +6,16 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 app = Flask(__name__)
 
-# Load jobs once when application starts
+# Load jobs
 jobs = pd.read_csv("jobs.csv")
 
-# Remove rows missing title or skills
-jobs = jobs.dropna(subset=["title", "skills"])
+jobs["title"] = jobs["title"].fillna("").astype(str)
+jobs["skills"] = jobs["skills"].fillna("").astype(str)
+
+jobs = jobs[
+    (jobs["title"] != "") &
+    (jobs["skills"] != "")
+]
 
 
 @app.route("/", methods=["GET", "POST"])
@@ -20,45 +25,66 @@ def home():
 
         candidate_skills = request.form["skills"]
 
-        # Create vectorizer
+        # TF-IDF Recommendation Engine
         vectorizer = TfidfVectorizer()
 
-        # Candidate + jobs
         documents = [candidate_skills] + jobs["skills"].tolist()
 
-        print("\nDOCUMENTS BEING SENT TO TF-IDF:\n")
-
-        for i, doc in enumerate(documents):
-            print(f"{i}: {repr(doc)} ({type(doc)})")
-
-        # Convert text into vectors
         tfidf_matrix = vectorizer.fit_transform(documents)
 
-        # Candidate vector
         candidate_vector = tfidf_matrix[0]
 
-        # All job vectors
         job_vectors = tfidf_matrix[1:]
 
-        # Calculate similarity
-        scores = cosine_similarity(
+        similarity_scores = cosine_similarity(
             candidate_vector,
             job_vectors
         )
 
-        # Create copy so we don't permanently modify dataframe
         results = jobs.copy()
 
-        results["similarity"] = scores[0]
+        results["similarity"] = similarity_scores[0]
 
-        top_jobs = results.sort_values(
-            by="similarity",
-            ascending=False
+        # Skill Gap Analysis
+        candidate_set = set(
+            candidate_skills.lower().split()
+        )
+
+        missing_skills_list = []
+
+        for _, row in results.iterrows():
+
+            job_set = set(
+                row["skills"].lower().split()
+            )
+
+            matched = candidate_set.intersection(job_set)
+
+            missing = job_set - candidate_set
+
+            match_percentage = (
+                len(matched) /
+                len(job_set)
+            ) * 100
+
+            missing_skills_list.append({
+                "title": row["title"],
+                "skills": row["skills"],
+                "similarity": row["similarity"],
+                "matched": sorted(list(matched)),
+                "missing": sorted(list(missing)),
+                "match_percentage": round(match_percentage, 2)
+            })
+
+        missing_skills_list = sorted(
+            missing_skills_list,
+            key=lambda x: x["similarity"],
+            reverse=True
         )
 
         return render_template(
             "results.html",
-            jobs=top_jobs.to_dict(orient="records")
+            jobs=missing_skills_list
         )
 
     return render_template("index.html")
