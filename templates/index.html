@@ -2,32 +2,51 @@
 <html>
 
 <head>
+
     <title>Uganda Job Recommendation System</title>
+
+    .net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
 </head>
 
-<body>
+<body class="bg-light">
 
-    <h1>Uganda Job Recommendation System</h1>
+<div class="container mt-5">
 
-    <h3>Enter Your Skills</h3>
+    <div class="card shadow">
 
-    <form method="POST">
+        <div class="card-body">
 
-        <textarea
-            name="skills"
-            rows="8"
-            cols="60"
-            placeholder="Example: Python Flask SQL Git">
-        </textarea>
+            <h1 class="text-center mb-4">
+                Uganda Job Recommendation System
+            </h1>
 
-        <br><br>
+            <form method="POST">
 
-        <button type="submit">
-            Find Matching Jobs
-        </button>
+                <label class="form-label">
+                    Enter Your Skills
+                </label>
 
-    </form>
+                <textarea
+                    class="form-control"
+                    name="skills"
+                    rows="8"
+                    placeholder="Example: Python Flask SQL Git">
+                </textarea>
+
+                <button
+                    class="btn btn-primary mt-3">
+                    Find Matching Jobs
+                </button>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
 
 </body>
-
 </html>
