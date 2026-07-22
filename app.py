@@ -52,6 +52,34 @@ def home():
 
         missing_skills_list = []
 
+        course_map = {
+
+            "restapi":
+                "REST API Development",
+
+            "tensorflow":
+                "TensorFlow Fundamentals",
+
+            "machinelearning":
+                "Machine Learning Basics",
+
+            "react":
+                "React Frontend Development",
+
+            "powerbi":
+                "Microsoft Power BI",
+
+            "statistics":
+                "Statistics for Data Science",
+
+            "linux":
+                "Linux Administration",
+
+            "networking":
+                "Computer Networking Fundamentals"
+
+            }
+
         for _, row in results.iterrows():
 
             job_set = set(
@@ -62,19 +90,38 @@ def home():
 
             missing = job_set - candidate_set
 
+            recommended_courses = []
+
+            for skill in missing:
+
+                if skill in course_map:
+
+                    recommended_courses.append(
+                        course_map[skill]
+                )
+
             match_percentage = (
                 len(matched) /
                 len(job_set)
             ) * 100
 
             missing_skills_list.append({
+
                 "title": row["title"],
+
                 "skills": row["skills"],
+
                 "similarity": row["similarity"],
+
                 "matched": sorted(list(matched)),
+
                 "missing": sorted(list(missing)),
-                "match_percentage": round(match_percentage, 2)
-            })
+
+                "match_percentage": round(match_percentage, 2),
+
+                "courses": recommended_courses
+
+                })
 
         missing_skills_list = sorted(
             missing_skills_list,
