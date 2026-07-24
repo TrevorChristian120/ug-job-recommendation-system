@@ -129,6 +129,9 @@ def home():
             reverse=True
         )
 
+        # Keep only top 5 matches
+        missing_skills_list = missing_skills_list[:5]
+
         return render_template(
             "results.html",
             jobs=missing_skills_list
