@@ -3,10 +3,10 @@
 
 <head>
 
-    <title>Recommendations</title>
+    <title>Uganda Job Recommendation System</title>
 
-    cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css"
-          rel="stylesheet">
+    ://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+        rel="stylesheet">
 
 </head>
 
@@ -14,102 +14,79 @@
 
 <div class="container mt-5">
 
-    <h1 class="text-center mb-5">
-
-        Your Job Recommendations
-
-    </h1>
-
-    {% for job in jobs %}
-
-    <div class="card mb-4 shadow">
+    <div class="card shadow">
 
         <div class="card-body">
 
-            <h3>
+            <h1 class="text-center mb-4">
+                Uganda Job Recommendation System
+            </h1>
 
-                {{ job.title }}
+            <form method="POST">
 
-            </h3>
+                <label class="form-label">
+                    Full Name
+                </label>
 
-            <p>
+                <input
+                    type="text"
+                    class="form-control"
+                    name="name"
+                    required>
 
-                Similarity Score:
+                <br>
 
-                <strong>
+                <label class="form-label">
+                    Degree
+                </label>
 
-                    {{ (job.similarity * 100)|round(2) }}%
+                <input
+                    type="text"
+                    class="form-control"
+                    name="degree"
+                    required>
 
-                </strong>
+                <br>
 
-            </p>
+                <label class="form-label">
+                    Skills
+                </label>
 
-            <div class="progress mb-3">
+                <textarea
+                    name="skills"
+                    class="form-control"
+                    rows="6"
+                    required>
+                </textarea>
 
-                <div class="progress-bar"
-                     style="width: {{ (job.similarity * 100)|round(2) }}%;">
+                <br>
 
-                    {{ (job.similarity * 100)|round(0) }}%
+                <label class="form-label">
+                    Experience
+                </label>
 
-                </div>
+                <textarea
+                    name="experience"
+                    class="form-control"
+                    rows="4"
+                    required>
+                </textarea>
 
-            </div>
+                <br>
 
-            
-            <h4 class="text-primary">
-                Rank #{{ loop.index }}
-            </h4>
+                <button
+                    class="btn btn-primary">
+                    Get Recommendations
+                </button>
 
-
-            <h5>
-                Skills You Have
-            </h5>
-
-            <ul>
-
-                {% for skill in job.matched %}
-
-                <li class="text-success">
-
-                    ✔ {{ skill }}
-
-                </li>
-
-                {% endfor %}
-
-            </ul>
-
-            <h5>
-                Missing Skills
-            </h5>
-
-            <ul>
-
-                {% for skill in job.missing %}
-
-                <li class="text-danger">
-
-                    ✘ {{ skill }}
-
-                </li>
-
-                {% endfor %}
-
-            </ul>
+            </form>
 
         </div>
 
     </div>
 
-    {% endfor %}
-
-    /
-
-       Try Again
-
-    </a>
-
 </div>
 
 </body>
+
 </html>

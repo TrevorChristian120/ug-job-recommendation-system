@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 import pandas as pd
+import sqlite3
 
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.metrics.pairwise import cosine_similarity
@@ -23,7 +24,37 @@ def home():
 
     if request.method == "POST":
 
+        name = request.form["name"]
+
+        degree = request.form["degree"]
+
         candidate_skills = request.form["skills"]
+
+        experience = request.form["experience"]
+
+        connection = sqlite3.connect(
+            "job_recommender.db"
+        )
+
+        cursor = connection.cursor()
+
+        cursor.execute(
+            """
+            INSERT INTO users
+            (name, degree, skills, experience)
+
+            VALUES (?, ?, ?, ?)
+            """,
+            (
+                name,
+                degree,
+                candidate_skills,
+                experience
+            )
+        )
+
+        connection.commit()
+        connection.close()
 
         # TF-IDF Recommendation Engine
         vectorizer = TfidfVectorizer()

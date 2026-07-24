@@ -4,6 +4,7 @@ connection = sqlite3.connect("job_recommender.db")
 
 cursor = connection.cursor()
 
+# Users table
 cursor.execute("""
 CREATE TABLE IF NOT EXISTS users (
 
@@ -20,8 +21,18 @@ CREATE TABLE IF NOT EXISTS users (
 )
 """)
 
-connection.commit()
+# Skill gaps table
+cursor.execute("""
+CREATE TABLE IF NOT EXISTS skill_gaps (
 
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+    skill TEXT NOT NULL
+
+)
+""")
+
+connection.commit()
 connection.close()
 
 print("Database Created Successfully")
